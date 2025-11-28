@@ -35,6 +35,15 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { adminService } from '../services/adminService';
 import { DispatchSchedule, Technician, Job } from '../types';
 
+// Dispatch board configuration - adjust based on business hours
+const BUSINESS_HOURS_START = 7; // 7:00 AM
+const BUSINESS_HOURS_END = 19; // 7:00 PM
+const TIME_SLOTS = Array.from(
+  { length: BUSINESS_HOURS_END - BUSINESS_HOURS_START + 1 },
+  (_, i) => `${String(BUSINESS_HOURS_START + i).padStart(2, '0')}:00`
+);
+const TIME_SLOT_WIDTH = 80; // pixels per hour slot
+
 const DispatchBoard: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'day' | 'week'>('day');
@@ -154,11 +163,6 @@ const DispatchBoard: React.FC = () => {
   technicians.forEach(tech => {
     schedulesByTechnician[tech.id] = schedules.filter(s => s.technicianId === tech.id);
   });
-
-  const timeSlots = [
-    '07:00', '08:00', '09:00', '10:00', '11:00', '12:00',
-    '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'
-  ];
 
   return (
     <Box>
@@ -282,7 +286,7 @@ const DispatchBoard: React.FC = () => {
                 </Typography>
               ) : (
                 <Box sx={{ overflowX: 'auto' }}>
-                  <Box sx={{ minWidth: 800 }}>
+                  <Box sx={{ minWidth: 150 + TIME_SLOTS.length * TIME_SLOT_WIDTH }}>
                     {/* Header with time slots */}
                     <Box sx={{ display: 'flex', borderBottom: '1px solid', borderColor: 'divider', pb: 1, mb: 2 }}>
                       <Box sx={{ width: 150, flexShrink: 0 }}>
@@ -290,8 +294,8 @@ const DispatchBoard: React.FC = () => {
                           Technician
                         </Typography>
                       </Box>
-                      {timeSlots.map((time) => (
-                        <Box key={time} sx={{ width: 80, flexShrink: 0, textAlign: 'center' }}>
+                      {TIME_SLOTS.map((time) => (
+                        <Box key={time} sx={{ width: TIME_SLOT_WIDTH, flexShrink: 0, textAlign: 'center' }}>
                           <Typography variant="caption" color="text.secondary">
                             {time}
                           </Typography>
@@ -337,7 +341,7 @@ const DispatchBoard: React.FC = () => {
                             const startHour = parseInt(schedule.startTime.split(':')[0]);
                             const endHour = parseInt(schedule.endTime.split(':')[0]);
                             const duration = endHour - startHour;
-                            const offsetSlots = startHour - 7; // 7:00 is first slot
+                            const offsetSlots = startHour - BUSINESS_HOURS_START;
 
                             return (
                               <Tooltip 
@@ -353,8 +357,8 @@ const DispatchBoard: React.FC = () => {
                                 <Paper
                                   sx={{
                                     position: 'absolute',
-                                    left: offsetSlots * 80,
-                                    width: duration * 80 - 4,
+                                    left: offsetSlots * TIME_SLOT_WIDTH,
+                                    width: duration * TIME_SLOT_WIDTH - 4,
                                     height: 40,
                                     bgcolor: getStatusColor(schedule.status),
                                     color: 'white',

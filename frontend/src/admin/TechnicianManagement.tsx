@@ -40,6 +40,10 @@ import EmailIcon from '@mui/icons-material/Email';
 import { adminService } from '../services/adminService';
 import { Technician } from '../types';
 
+// Configuration constants
+const DEFAULT_HOURLY_RATE = 25;
+const DEFAULT_COLOR = '#1976d2';
+
 interface TechnicianFormData {
   firstName: string;
   lastName: string;
@@ -125,8 +129,8 @@ const TechnicianManagement: React.FC = () => {
       setEditingTechnician(null);
       reset({
         status: 'active',
-        color: '#1976d2',
-        hourlyRate: 25,
+        color: DEFAULT_COLOR,
+        hourlyRate: DEFAULT_HOURLY_RATE,
       });
     }
     setDialogOpen(true);
