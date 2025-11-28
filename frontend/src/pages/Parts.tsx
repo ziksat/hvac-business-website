@@ -98,10 +98,13 @@ const Parts: React.FC = () => {
     return filtered;
   }, [categoryFilter, searchTerm]);
 
-  const parts = (isError || !data?.items?.length) ? filteredMockParts : data?.items || [];
-  const totalPages = (isError || !data?.items?.length) ? Math.ceil(filteredMockParts.length / itemsPerPage) : (data?.pagination?.totalPages || 1);
+  // Determine if we should use mock data (when backend fails or returns no data)
+  const useMockData = isError || !data || !data.items || data.items.length === 0;
+  
+  const parts = useMockData ? filteredMockParts : data.items;
+  const totalPages = useMockData ? Math.ceil(filteredMockParts.length / itemsPerPage) : (data?.pagination?.totalPages || 1);
   const categories = categoriesData?.length ? categoriesData : mockCategories;
-  const displayParts = (isError || !data?.items?.length) ? filteredMockParts.slice((page - 1) * itemsPerPage, page * itemsPerPage) : parts;
+  const displayParts = useMockData ? filteredMockParts.slice((page - 1) * itemsPerPage, page * itemsPerPage) : parts;
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -171,7 +174,7 @@ const Parts: React.FC = () => {
             </Grid>
             <Grid item xs={12} md={2}>
               <Typography variant="body2" color="text.secondary" textAlign={{ xs: 'left', md: 'right' }}>
-                {(isError || !data?.items?.length) ? filteredMockParts.length : (data?.pagination?.total || 0)} items found
+                {useMockData ? filteredMockParts.length : (data?.pagination?.total || 0)} items found
               </Typography>
             </Grid>
           </Grid>
