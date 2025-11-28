@@ -1,7 +1,7 @@
-import { AzureFunction, Context } from '@azure/functions';
+import { app, Timer, InvocationContext } from '@azure/functions';
 import * as sql from 'mssql';
 
-const timerTrigger: AzureFunction = async function (context: Context): Promise<void> {
+const databaseCleanupHandler = async (_timer: Timer, context: InvocationContext): Promise<void> => {
   context.log('Database cleanup function started at:', new Date().toISOString());
 
   try {
@@ -34,7 +34,7 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
     `);
     context.log(`Deleted ${cancelledRequestsResult.rowsAffected[0]} old cancelled service requests`);
 
-    // Cleanup completed service requests older than 1 year (optional - can be adjusted)
+    // Cleanup completed service requests older than 1 year
     const completedRequestsResult = await pool.request().query(`
       DELETE FROM ServiceRequests 
       WHERE status = 'completed' AND createdAt < DATEADD(year, -1, GETDATE())
@@ -54,9 +54,12 @@ const timerTrigger: AzureFunction = async function (context: Context): Promise<v
     await pool.close();
     context.log('Database cleanup function completed successfully');
   } catch (error) {
-    context.log.error('Database cleanup function failed:', error);
+    context.error('Database cleanup function failed:', error);
     throw error;
   }
 };
 
-export default timerTrigger;
+app.timer('databaseCleanup', {
+  schedule: '0 0 3 * * *', // Run at 3 AM daily
+  handler: databaseCleanupHandler,
+});

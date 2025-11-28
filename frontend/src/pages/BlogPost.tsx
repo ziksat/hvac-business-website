@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
+import DOMPurify from 'dompurify';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { publicService } from '../services/publicService';
 
@@ -102,7 +103,7 @@ const BlogPost: React.FC = () => {
               '& ul, & ol': { mb: 2, pl: 3 },
               '& li': { mb: 1 },
             }}
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
           />
 
           {/* Tags */}

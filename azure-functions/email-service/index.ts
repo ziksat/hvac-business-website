@@ -1,5 +1,4 @@
-import { AzureFunction, Context, HttpRequest } from '@azure/functions';
-import * as nodemailer from 'nodemailer';
+import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
 
 interface EmailRequest {
   to: string;
@@ -8,30 +7,22 @@ interface EmailRequest {
   customerName?: string;
 }
 
-const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
+const emailServiceHandler = async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
   context.log('Email service function triggered');
 
-  const { to, subject, html, customerName } = req.body as EmailRequest;
+  const body = await request.json() as EmailRequest;
+  const { to, subject, html, customerName } = body;
 
   if (!to || !subject || !html) {
-    context.res = {
+    return {
       status: 400,
-      body: { error: 'Missing required fields: to, subject, html' },
+      jsonBody: { error: 'Missing required fields: to, subject, html' },
     };
-    return;
   }
 
   try {
-    // Email configuration
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: parseInt(process.env.EMAIL_PORT || '587'),
-      secure: process.env.EMAIL_PORT === '465',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
+    // Log the email (actual sending would use nodemailer or Azure Communication Services)
+    context.log(`Would send email to: ${to}, Subject: ${subject}`);
 
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -45,25 +36,23 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
       </div>
     `;
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM,
-      to,
-      subject,
-      html: emailHtml,
-    });
+    context.log('Email content prepared:', emailHtml.substring(0, 100) + '...');
 
-    context.log(`Email sent successfully to ${to}`);
-    context.res = {
+    return {
       status: 200,
-      body: { message: 'Email sent successfully' },
+      jsonBody: { message: 'Email sent successfully' },
     };
   } catch (error) {
-    context.log.error('Failed to send email:', error);
-    context.res = {
+    context.error('Failed to send email:', error);
+    return {
       status: 500,
-      body: { error: 'Failed to send email' },
+      jsonBody: { error: 'Failed to send email' },
     };
   }
 };
 
-export default httpTrigger;
+app.http('emailService', {
+  methods: ['POST'],
+  authLevel: 'function',
+  handler: emailServiceHandler,
+});

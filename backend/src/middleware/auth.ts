@@ -50,6 +50,6 @@ export const authorizeAdmin = (
 
 export const generateToken = (userId: number, role: string): string => {
   return jwt.sign({ userId, role }, config.jwt.secret, {
-    expiresIn: config.jwt.expiresIn,
-  });
+    expiresIn: config.jwt.expiresIn as string,
+  } as jwt.SignOptions);
 };

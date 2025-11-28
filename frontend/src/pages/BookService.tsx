@@ -57,7 +57,7 @@ const BookService: React.FC = () => {
     setSubmitStatus(null);
 
     try {
-      await publicService.submitServiceRequest(data);
+      await publicService.submitServiceRequest(data as unknown as Record<string, unknown>);
       setSubmitStatus('success');
       reset();
     } catch {

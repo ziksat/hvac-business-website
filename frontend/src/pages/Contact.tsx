@@ -38,7 +38,7 @@ const Contact: React.FC = () => {
     setSubmitStatus(null);
 
     try {
-      await publicService.submitContactForm(data);
+      await publicService.submitContactForm(data as unknown as Record<string, unknown>);
       setSubmitStatus('success');
       reset();
     } catch {
