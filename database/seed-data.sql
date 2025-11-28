@@ -76,3 +76,117 @@ INSERT INTO ServiceHistory (customerId, serviceId, serviceDate, technician, note
 (1, 1, DATEADD(month, -3, GETDATE()), 'Tech Mike', 'Replaced capacitor. AC now cooling properly.', 185.00),
 (2, 5, DATEADD(month, -4, GETDATE()), 'Tech John', 'Serviced both units. Replaced filters.', 149.00),
 (3, 5, DATEADD(month, -2, GETDATE()), 'Tech Sarah', 'Commercial maintenance completed.', 199.00);
+
+-- =====================================================
+-- HVAC Parts & Supplies Inventory
+-- =====================================================
+
+-- Air Filters
+INSERT INTO Inventory (sku, name, description, category, brand, unitCost, sellingPrice, quantityOnHand, reorderPoint, reorderQuantity, location, supplier, isActive) VALUES
+('FLT-16251-MERV8', '16x25x1 MERV 8 Air Filter', 'Standard pleated air filter for residential HVAC systems. MERV 8 rating captures dust, pollen, and pet dander.', 'Air Filters', 'FilterBuy', 4.50, 12.99, 100, 25, 50, 'Aisle A-1', 'HVAC Supply Co', 1),
+('FLT-16251-MERV11', '16x25x1 MERV 11 Air Filter', 'High-efficiency pleated filter. Captures finer particles including mold spores and dust mite debris.', 'Air Filters', 'FilterBuy', 6.00, 16.99, 75, 20, 40, 'Aisle A-1', 'HVAC Supply Co', 1),
+('FLT-16251-MERV13', '16x25x1 MERV 13 Air Filter', 'Hospital-grade filtration. Captures bacteria, smoke, and virus carriers.', 'Air Filters', 'FilterBuy', 9.00, 24.99, 50, 15, 30, 'Aisle A-1', 'HVAC Supply Co', 1),
+('FLT-20201-MERV8', '20x20x1 MERV 8 Air Filter', 'Standard pleated filter for 20x20 returns. Ideal for residential use.', 'Air Filters', 'Honeywell', 5.00, 14.99, 80, 20, 40, 'Aisle A-2', 'HVAC Supply Co', 1),
+('FLT-20251-MERV8', '20x25x1 MERV 8 Air Filter', 'Common size pleated filter for larger HVAC systems.', 'Air Filters', 'Honeywell', 5.50, 15.99, 90, 25, 50, 'Aisle A-2', 'HVAC Supply Co', 1),
+('FLT-20254-MERV11', '20x25x4 MERV 11 Deep Pleat Filter', 'Extended life deep pleat filter. Lasts up to 6 months.', 'Air Filters', 'Lennox', 22.00, 54.99, 30, 10, 20, 'Aisle A-3', 'HVAC Supply Co', 1),
+('FLT-16254-MERV16', '16x25x4 MERV 16 Hospital Grade Filter', 'Maximum filtration for allergy and asthma sufferers.', 'Air Filters', 'Carrier', 35.00, 89.99, 20, 5, 15, 'Aisle A-3', 'HVAC Supply Co', 1),
+
+-- Capacitors
+('CAP-35-440', '35/5 MFD 440V Dual Run Capacitor', 'Dual run capacitor for AC compressor and fan motor. Universal replacement.', 'Capacitors', 'Titan Pro', 8.50, 24.99, 40, 10, 20, 'Aisle B-1', 'GEMCO Supply', 1),
+('CAP-45-440', '45/5 MFD 440V Dual Run Capacitor', 'Common replacement capacitor for 2-3 ton AC units.', 'Capacitors', 'Titan Pro', 9.00, 27.99, 35, 10, 20, 'Aisle B-1', 'GEMCO Supply', 1),
+('CAP-55-440', '55/5 MFD 440V Dual Run Capacitor', 'Heavy-duty capacitor for larger compressors.', 'Capacitors', 'Titan Pro', 11.00, 32.99, 25, 8, 15, 'Aisle B-1', 'GEMCO Supply', 1),
+('CAP-60-440', '60/5 MFD 440V Dual Run Capacitor', 'For 4-5 ton residential and light commercial units.', 'Capacitors', 'Titan Pro', 12.50, 36.99, 20, 5, 10, 'Aisle B-1', 'GEMCO Supply', 1),
+('CAP-START-88108', '88-108 MFD Start Capacitor', 'Motor start capacitor for compressor startup.', 'Capacitors', 'Supco', 7.00, 19.99, 30, 8, 15, 'Aisle B-2', 'GEMCO Supply', 1),
+('CAP-START-145175', '145-175 MFD Start Capacitor', 'High-torque start capacitor for larger motors.', 'Capacitors', 'Supco', 9.50, 26.99, 25, 5, 10, 'Aisle B-2', 'GEMCO Supply', 1),
+
+-- Contactors & Relays
+('CON-1P-30A', '1-Pole 30 Amp Contactor 24V Coil', 'Single pole contactor for AC units. Universal replacement.', 'Contactors & Relays', 'Packard', 12.00, 34.99, 25, 8, 15, 'Aisle B-3', 'GEMCO Supply', 1),
+('CON-2P-40A', '2-Pole 40 Amp Contactor 24V Coil', 'Standard AC contactor for residential systems.', 'Contactors & Relays', 'Packard', 15.00, 42.99, 30, 10, 20, 'Aisle B-3', 'GEMCO Supply', 1),
+('RLY-SPST-24V', 'SPST Relay 24V Coil', 'Single pole single throw relay for HVAC controls.', 'Contactors & Relays', 'White-Rodgers', 8.00, 22.99, 20, 5, 10, 'Aisle B-3', 'GEMCO Supply', 1),
+('RLY-DPDT-24V', 'DPDT Relay 24V Coil', 'Double pole double throw relay. Ice maker, heat pump applications.', 'Contactors & Relays', 'White-Rodgers', 12.00, 32.99, 15, 5, 10, 'Aisle B-3', 'GEMCO Supply', 1),
+('RLY-TIME-DELAY', 'Time Delay Relay 1-180 Seconds', 'Adjustable time delay relay for compressor protection.', 'Contactors & Relays', 'ICM Controls', 18.00, 49.99, 12, 4, 8, 'Aisle B-4', 'GEMCO Supply', 1),
+
+-- Motors & Blowers
+('MTR-COND-1/4', '1/4 HP Condenser Fan Motor', 'Universal condenser fan motor. 1075 RPM, 208-230V.', 'Motors & Blowers', 'US Motors', 65.00, 149.99, 15, 5, 10, 'Aisle C-1', 'Motors Plus', 1),
+('MTR-COND-1/3', '1/3 HP Condenser Fan Motor', 'Standard replacement condenser motor for 2-3 ton units.', 'Motors & Blowers', 'US Motors', 75.00, 169.99, 12, 4, 8, 'Aisle C-1', 'Motors Plus', 1),
+('MTR-COND-1/2', '1/2 HP Condenser Fan Motor', 'Heavy-duty condenser motor for larger systems.', 'Motors & Blowers', 'US Motors', 95.00, 199.99, 10, 3, 6, 'Aisle C-1', 'Motors Plus', 1),
+('MTR-BLOWER-1/2', '1/2 HP Direct Drive Blower Motor', 'Indoor blower motor. 4-speed, 115V.', 'Motors & Blowers', 'Fasco', 85.00, 189.99, 10, 3, 6, 'Aisle C-2', 'Motors Plus', 1),
+('MTR-BLOWER-3/4', '3/4 HP Direct Drive Blower Motor', 'Variable speed indoor blower motor.', 'Motors & Blowers', 'Fasco', 120.00, 259.99, 8, 3, 5, 'Aisle C-2', 'Motors Plus', 1),
+('MTR-ECM-1HP', '1 HP ECM Blower Motor', 'High-efficiency ECM motor. Programmable, variable speed.', 'Motors & Blowers', 'Genteq', 280.00, 549.99, 5, 2, 4, 'Aisle C-3', 'Motors Plus', 1),
+('MTR-DRAFT-IND', 'Draft Inducer Motor Assembly', 'Replacement inducer motor for furnaces. Universal kit.', 'Motors & Blowers', 'Fasco', 145.00, 299.99, 6, 2, 4, 'Aisle C-3', 'Motors Plus', 1),
+
+-- Thermostats
+('TSTAT-BASIC', 'Basic Non-Programmable Thermostat', 'Simple heat/cool thermostat. Battery or hardwired.', 'Thermostats', 'Honeywell', 18.00, 44.99, 25, 8, 15, 'Aisle D-1', 'HVAC Supply Co', 1),
+('TSTAT-PROG-5-2', '5-2 Day Programmable Thermostat', 'Weekday/weekend programming. Easy to use interface.', 'Thermostats', 'Honeywell', 35.00, 79.99, 20, 6, 12, 'Aisle D-1', 'HVAC Supply Co', 1),
+('TSTAT-PROG-7DAY', '7-Day Programmable Thermostat', 'Full week programming with touchscreen display.', 'Thermostats', 'Honeywell', 55.00, 119.99, 15, 5, 10, 'Aisle D-1', 'HVAC Supply Co', 1),
+('TSTAT-WIFI-BASIC', 'WiFi Smart Thermostat', 'Basic WiFi thermostat with app control. Works with Alexa.', 'Thermostats', 'Emerson', 85.00, 179.99, 12, 4, 8, 'Aisle D-2', 'HVAC Supply Co', 1),
+('TSTAT-NEST-E', 'Nest Thermostat E', 'Smart learning thermostat. Energy saving features.', 'Thermostats', 'Google Nest', 120.00, 249.99, 8, 3, 6, 'Aisle D-2', 'HVAC Supply Co', 1),
+('TSTAT-ECOBEE-LITE', 'ecobee Lite Smart Thermostat', 'Smart thermostat with room sensors. HomeKit compatible.', 'Thermostats', 'ecobee', 135.00, 279.99, 8, 3, 6, 'Aisle D-2', 'HVAC Supply Co', 1),
+
+-- Refrigerant & Chemicals
+('REF-R410A-25', 'R-410A Refrigerant 25 lb Cylinder', 'Factory sealed R-410A refrigerant. For modern AC systems.', 'Refrigerants & Chemicals', 'Chemours', 175.00, 349.99, 20, 5, 10, 'Aisle E-1', 'Refrigerant Depot', 1),
+('REF-R22-30', 'R-22 Refrigerant 30 lb Cylinder', 'R-22 Freon for legacy systems. EPA certified handlers only.', 'Refrigerants & Chemicals', 'Chemours', 450.00, 899.99, 10, 3, 5, 'Aisle E-1', 'Refrigerant Depot', 1),
+('REF-R134A-30', 'R-134a Refrigerant 30 lb Cylinder', 'Automotive and some HVAC applications.', 'Refrigerants & Chemicals', 'DuPont', 95.00, 189.99, 15, 4, 8, 'Aisle E-1', 'Refrigerant Depot', 1),
+('OIL-PAG-QT', 'PAG Compressor Oil 1 Quart', 'Universal PAG oil for AC compressors.', 'Refrigerants & Chemicals', 'Nu-Calgon', 12.00, 29.99, 25, 8, 15, 'Aisle E-2', 'HVAC Supply Co', 1),
+('COIL-CLEANER-GAL', 'Evaporator Coil Cleaner 1 Gallon', 'No-rinse foaming coil cleaner. Biodegradable.', 'Refrigerants & Chemicals', 'Nu-Calgon', 18.00, 42.99, 30, 10, 20, 'Aisle E-2', 'HVAC Supply Co', 1),
+('COND-CLEANER-GAL', 'Condenser Coil Cleaner 1 Gallon', 'Heavy-duty outdoor coil cleaner. Dissolves grime.', 'Refrigerants & Chemicals', 'Nu-Calgon', 22.00, 49.99, 25, 8, 15, 'Aisle E-2', 'HVAC Supply Co', 1),
+('DRAIN-TABS-200', 'Condensate Drain Pan Tablets 200ct', 'Prevents algae and slime in drain pans and lines.', 'Refrigerants & Chemicals', 'Pan Tablets', 25.00, 59.99, 20, 5, 10, 'Aisle E-3', 'HVAC Supply Co', 1),
+
+-- Furnace Parts
+('IGN-HSI-UNIV', 'Universal Hot Surface Ignitor', 'Replacement HSI for most furnace brands. 80-120V.', 'Furnace Parts', 'White-Rodgers', 18.00, 44.99, 30, 10, 20, 'Aisle F-1', 'GEMCO Supply', 1),
+('IGN-PILOT-UNIV', 'Universal Pilot Ignition Kit', 'Standing pilot ignition kit with thermocouple.', 'Furnace Parts', 'Robertshaw', 28.00, 69.99, 15, 5, 10, 'Aisle F-1', 'GEMCO Supply', 1),
+('SENSOR-FLAME', 'Flame Sensor Rod', 'Universal flame sensor for gas furnaces.', 'Furnace Parts', 'Honeywell', 8.00, 19.99, 40, 15, 30, 'Aisle F-1', 'GEMCO Supply', 1),
+('VALVE-GAS-24V', '24V Gas Valve Universal', 'Standard replacement gas valve. Natural gas.', 'Furnace Parts', 'White-Rodgers', 85.00, 179.99, 8, 3, 6, 'Aisle F-2', 'GEMCO Supply', 1),
+('VALVE-GAS-LP', 'LP Gas Conversion Valve', 'Natural gas to LP conversion valve kit.', 'Furnace Parts', 'Honeywell', 45.00, 99.99, 10, 3, 6, 'Aisle F-2', 'GEMCO Supply', 1),
+('LIMIT-ROLLOUT', 'Rollout Limit Switch 350°F', 'Safety limit switch for furnace burner compartment.', 'Furnace Parts', 'Therm-O-Disc', 12.00, 29.99, 25, 8, 15, 'Aisle F-2', 'GEMCO Supply', 1),
+('LIMIT-HIGH-200', 'High Limit Switch 200°F', 'Furnace high temperature limit switch.', 'Furnace Parts', 'Therm-O-Disc', 10.00, 24.99, 30, 10, 20, 'Aisle F-2', 'GEMCO Supply', 1),
+('PRESS-SWITCH', 'Pressure Switch Universal', 'Draft pressure switch for induced draft furnaces.', 'Furnace Parts', 'Honeywell', 22.00, 54.99, 20, 6, 12, 'Aisle F-3', 'GEMCO Supply', 1),
+
+-- Compressors
+('COMP-SCROLL-2T', '2 Ton Scroll Compressor R-410A', 'Replacement scroll compressor for residential AC.', 'Compressors', 'Copeland', 550.00, 999.99, 4, 2, 3, 'Aisle G-1', 'Compressor World', 1),
+('COMP-SCROLL-3T', '3 Ton Scroll Compressor R-410A', 'Mid-size residential scroll compressor.', 'Compressors', 'Copeland', 650.00, 1199.99, 3, 1, 2, 'Aisle G-1', 'Compressor World', 1),
+('COMP-SCROLL-4T', '4 Ton Scroll Compressor R-410A', 'Large residential scroll compressor.', 'Compressors', 'Copeland', 750.00, 1399.99, 3, 1, 2, 'Aisle G-1', 'Compressor World', 1),
+('COMP-SCROLL-5T', '5 Ton Scroll Compressor R-410A', 'Heavy-duty residential/light commercial compressor.', 'Compressors', 'Copeland', 850.00, 1599.99, 2, 1, 2, 'Aisle G-1', 'Compressor World', 1),
+
+-- Ductwork & Accessories
+('DUCT-FLEX-6X25', '6" x 25ft Insulated Flex Duct', 'R-8 insulated flexible duct. UL listed.', 'Ductwork & Accessories', 'Dundas Jafine', 35.00, 79.99, 20, 5, 10, 'Aisle H-1', 'HVAC Supply Co', 1),
+('DUCT-FLEX-8X25', '8" x 25ft Insulated Flex Duct', 'R-8 insulated flexible duct for larger runs.', 'Ductwork & Accessories', 'Dundas Jafine', 45.00, 99.99, 15, 5, 10, 'Aisle H-1', 'HVAC Supply Co', 1),
+('DUCT-FLEX-10X25', '10" x 25ft Insulated Flex Duct', 'R-8 insulated trunk line flexible duct.', 'Ductwork & Accessories', 'Dundas Jafine', 55.00, 119.99, 12, 4, 8, 'Aisle H-1', 'HVAC Supply Co', 1),
+('DUCT-TAPE-3X60', 'UL Listed Foil Duct Tape 3" x 60yd', 'Aluminum foil HVAC tape. Meets building codes.', 'Ductwork & Accessories', '3M', 12.00, 27.99, 50, 15, 30, 'Aisle H-2', 'HVAC Supply Co', 1),
+('DUCT-MASTIC-GAL', 'Duct Mastic Sealant 1 Gallon', 'Water-based duct sealant. Fiber reinforced.', 'Ductwork & Accessories', 'Hardcast', 18.00, 39.99, 25, 8, 15, 'Aisle H-2', 'HVAC Supply Co', 1),
+('REGISTER-4X10', 'Steel Floor Register 4x10 White', 'Two-way air register with damper.', 'Ductwork & Accessories', 'Hart & Cooley', 8.00, 18.99, 40, 10, 20, 'Aisle H-3', 'HVAC Supply Co', 1),
+('REGISTER-6X12', 'Steel Floor Register 6x12 White', 'Standard floor register with adjustable damper.', 'Ductwork & Accessories', 'Hart & Cooley', 10.00, 22.99, 35, 10, 20, 'Aisle H-3', 'HVAC Supply Co', 1),
+('GRILLE-RET-20X20', 'Return Air Grille 20x20 White', 'Steel return air grille with filter frame.', 'Ductwork & Accessories', 'Hart & Cooley', 22.00, 49.99, 20, 5, 10, 'Aisle H-3', 'HVAC Supply Co', 1),
+
+-- Control Boards & Modules
+('BOARD-FURNACE-UNIV', 'Universal Furnace Control Board', 'Replacement integrated furnace control. Most brands.', 'Control Boards', 'ICM Controls', 85.00, 189.99, 8, 3, 5, 'Aisle I-1', 'GEMCO Supply', 1),
+('BOARD-DEFROST', 'Heat Pump Defrost Control Board', 'Universal defrost timer board for heat pumps.', 'Control Boards', 'ICM Controls', 55.00, 129.99, 10, 4, 6, 'Aisle I-1', 'GEMCO Supply', 1),
+('BOARD-FAN-CTRL', 'Fan Control Board', 'Timed fan control for furnace blower.', 'Control Boards', 'ICM Controls', 35.00, 79.99, 12, 4, 8, 'Aisle I-1', 'GEMCO Supply', 1),
+('MODULE-IGN', 'Ignition Control Module', 'Direct spark or hot surface ignition module.', 'Control Boards', 'Honeywell', 65.00, 149.99, 8, 3, 5, 'Aisle I-2', 'GEMCO Supply', 1),
+('XFMR-40VA', '40VA Transformer 120V to 24V', 'Standard HVAC control transformer. Foot mount.', 'Control Boards', 'Packard', 12.00, 29.99, 35, 10, 20, 'Aisle I-2', 'GEMCO Supply', 1),
+
+-- Line Sets & Copper
+('LINESET-3/8-3/4-25', '3/8 x 3/4 x 25ft Mini Split Line Set', 'Pre-charged line set with flare fittings. Insulated.', 'Line Sets & Copper', 'Kooline', 85.00, 179.99, 10, 3, 6, 'Aisle J-1', 'GEMCO Supply', 1),
+('LINESET-3/8-3/4-50', '3/8 x 3/4 x 50ft Mini Split Line Set', 'Extended length pre-charged line set.', 'Line Sets & Copper', 'Kooline', 145.00, 299.99, 8, 2, 4, 'Aisle J-1', 'GEMCO Supply', 1),
+('COPPER-3/8-50', '3/8" ACR Copper Tubing 50ft', 'Soft copper tubing for refrigerant lines.', 'Line Sets & Copper', 'Mueller', 75.00, 159.99, 10, 3, 6, 'Aisle J-2', 'GEMCO Supply', 1),
+('COPPER-3/4-50', '3/4" ACR Copper Tubing 50ft', 'Suction line copper for AC installations.', 'Line Sets & Copper', 'Mueller', 125.00, 259.99, 8, 2, 4, 'Aisle J-2', 'GEMCO Supply', 1),
+
+-- Safety Equipment & Tools
+('LEAK-DET-ELEC', 'Electronic Refrigerant Leak Detector', 'Heated sensor leak detector. R-410A, R-22 compatible.', 'Tools & Safety', 'Inficon', 145.00, 299.99, 5, 2, 3, 'Aisle K-1', 'Tools Direct', 1),
+('GAUGE-MANIFOLD', 'Digital Manifold Gauge Set', 'R-410A digital manifold with hoses. Bluetooth enabled.', 'Tools & Safety', 'Yellow Jacket', 280.00, 549.99, 4, 2, 3, 'Aisle K-1', 'Tools Direct', 1),
+('VACUUM-PUMP-4CFM', '4 CFM Vacuum Pump', 'Two-stage vacuum pump for AC installation.', 'Tools & Safety', 'Robinair', 195.00, 399.99, 4, 2, 3, 'Aisle K-1', 'Tools Direct', 1),
+('RECOV-UNIT', 'Refrigerant Recovery Machine', 'Portable recovery unit for R-410A and R-22.', 'Tools & Safety', 'Appion', 650.00, 1299.99, 2, 1, 2, 'Aisle K-2', 'Tools Direct', 1),
+('SCALE-REFRIG', 'Refrigerant Charging Scale', 'Digital refrigerant scale. 220 lb capacity.', 'Tools & Safety', 'Yellow Jacket', 145.00, 299.99, 4, 2, 3, 'Aisle K-2', 'Tools Direct', 1),
+
+-- Mini Split Systems
+('MINI-9K-115V', '9,000 BTU Mini Split System', 'Ductless mini split. 115V, 19 SEER. Heat and cool.', 'Mini Split Systems', 'MrCool', 650.00, 1199.99, 5, 2, 3, 'Aisle L-1', 'Equipment Direct', 1),
+('MINI-12K-115V', '12,000 BTU Mini Split System', 'Single zone ductless system. WiFi ready.', 'Mini Split Systems', 'MrCool', 750.00, 1399.99, 5, 2, 3, 'Aisle L-1', 'Equipment Direct', 1),
+('MINI-18K-230V', '18,000 BTU Mini Split System', 'Larger single zone. 230V, 20 SEER efficiency.', 'Mini Split Systems', 'MrCool', 950.00, 1799.99, 4, 2, 3, 'Aisle L-1', 'Equipment Direct', 1),
+('MINI-24K-230V', '24,000 BTU Mini Split System', 'High capacity single zone. Heat pump.', 'Mini Split Systems', 'MrCool', 1150.00, 2199.99, 3, 1, 2, 'Aisle L-1', 'Equipment Direct', 1),
+('MINI-36K-MULTI', '36,000 BTU Multi-Zone System', '3-zone outdoor unit. Add indoor heads separately.', 'Mini Split Systems', 'MrCool', 1800.00, 3499.99, 2, 1, 2, 'Aisle L-2', 'Equipment Direct', 1);
+
+-- Insert sample technicians
+INSERT INTO Technicians (firstName, lastName, email, phone, hireDate, certifications, skills, hourlyRate, status, color) VALUES
+('John', 'Martinez', 'john.m@hvacpro.com', '(555) 111-0001', '2019-03-15', '["EPA 608 Universal","NATE Certified","R-410A Certified"]', '["HVAC Installation","AC Repair","Furnace Repair","Heat Pumps"]', 35.00, 'active', '#2196F3'),
+('Mike', 'Johnson', 'mike.j@hvacpro.com', '(555) 111-0002', '2020-06-01', '["EPA 608 Universal","NATE Certified"]', '["HVAC Maintenance","AC Repair","Duct Work"]', 32.00, 'active', '#4CAF50'),
+('Sarah', 'Williams', 'sarah.w@hvacpro.com', '(555) 111-0003', '2021-01-10', '["EPA 608 Universal","NATE Certified","BPI Certified"]', '["HVAC Installation","Commercial Systems","Energy Audits"]', 38.00, 'active', '#FF9800');
