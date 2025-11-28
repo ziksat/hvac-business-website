@@ -1,5 +1,15 @@
 import api from './api';
-import { Service, BlogPost, BlogPostsResponse, Testimonial, TestimonialsResponse, Settings, PageContent } from '../types';
+import { Service, BlogPost, BlogPostsResponse, Testimonial, TestimonialsResponse, Settings, PageContent, InventoryItem } from '../types';
+
+interface PartsResponse {
+  items: InventoryItem[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
 
 export const publicService = {
   // Services
@@ -58,6 +68,19 @@ export const publicService = {
   // Page Content
   getPageContent: async (pageId: string): Promise<PageContent> => {
     const response = await api.get<PageContent>(`/settings/pages/${pageId}`);
+    return response.data;
+  },
+
+  // Parts & Supplies (Public inventory)
+  getParts: async (page = 1, limit = 12, category = '', search = ''): Promise<PartsResponse> => {
+    const response = await api.get<PartsResponse>('/parts', {
+      params: { page, limit, category, search, active: true },
+    });
+    return response.data;
+  },
+
+  getPartCategories: async (): Promise<string[]> => {
+    const response = await api.get<string[]>('/parts/categories');
     return response.data;
   },
 };

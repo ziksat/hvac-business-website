@@ -22,6 +22,7 @@ import AcUnitIcon from '@mui/icons-material/AcUnit';
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Services', path: '/services' },
+  { label: 'Parts', path: '/parts' },
   { label: 'About', path: '/about' },
   { label: 'Blog', path: '/blog' },
   { label: 'Contact', path: '/contact' },

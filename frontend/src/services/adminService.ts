@@ -11,7 +11,26 @@ import {
   ServiceRequestsResponse,
   Settings,
   PageContent,
-  Equipment
+  Equipment,
+  Technician,
+  TechniciansResponse,
+  Job,
+  JobsResponse,
+  InventoryItem,
+  InventoryResponse,
+  Estimate,
+  EstimatesResponse,
+  Invoice,
+  InvoicesResponse,
+  Payment,
+  PaymentsResponse,
+  Timesheet,
+  TimesheetsResponse,
+  DispatchSchedule,
+  DispatchScheduleResponse,
+  DashboardStats,
+  JobPart,
+  JobLabor
 } from '../types';
 
 export const adminService = {
@@ -174,5 +193,349 @@ export const adminService = {
   // Email
   sendReminder: async (data: { to: string; customerName: string; subject: string; message: string }): Promise<void> => {
     await api.post('/email/send-reminder', data);
+  },
+
+  // =====================================================
+  // ServiceTitan-like Features
+  // =====================================================
+
+  // Dashboard Stats
+  getDashboardStats: async (): Promise<DashboardStats> => {
+    const response = await api.get<DashboardStats>('/dashboard/stats');
+    return response.data;
+  },
+
+  // Technicians
+  getTechnicians: async (page = 1, limit = 10, status = ''): Promise<TechniciansResponse> => {
+    const response = await api.get<TechniciansResponse>('/technicians', {
+      params: { page, limit, status: status || undefined },
+    });
+    return response.data;
+  },
+
+  getTechnicianById: async (id: number): Promise<Technician> => {
+    const response = await api.get<Technician>(`/technicians/${id}`);
+    return response.data;
+  },
+
+  createTechnician: async (data: Partial<Technician>): Promise<Technician> => {
+    const response = await api.post<Technician>('/technicians', data);
+    return response.data;
+  },
+
+  updateTechnician: async (id: number, data: Partial<Technician>): Promise<Technician> => {
+    const response = await api.put<Technician>(`/technicians/${id}`, data);
+    return response.data;
+  },
+
+  deleteTechnician: async (id: number): Promise<void> => {
+    await api.delete(`/technicians/${id}`);
+  },
+
+  // Jobs
+  getJobs: async (page = 1, limit = 10, status = '', technicianId?: number, customerId?: number, startDate?: string, endDate?: string): Promise<JobsResponse> => {
+    const response = await api.get<JobsResponse>('/jobs', {
+      params: { page, limit, status: status || undefined, technicianId, customerId, startDate, endDate },
+    });
+    return response.data;
+  },
+
+  getJobById: async (id: number): Promise<Job> => {
+    const response = await api.get<Job>(`/jobs/${id}`);
+    return response.data;
+  },
+
+  createJob: async (data: Partial<Job>): Promise<Job> => {
+    const response = await api.post<Job>('/jobs', data);
+    return response.data;
+  },
+
+  updateJob: async (id: number, data: Partial<Job>): Promise<Job> => {
+    const response = await api.put<Job>(`/jobs/${id}`, data);
+    return response.data;
+  },
+
+  updateJobStatus: async (id: number, status: string): Promise<Job> => {
+    const response = await api.patch<Job>(`/jobs/${id}/status`, { status });
+    return response.data;
+  },
+
+  deleteJob: async (id: number): Promise<void> => {
+    await api.delete(`/jobs/${id}`);
+  },
+
+  // Job Technicians
+  assignTechniciansToJob: async (jobId: number, technicianIds: number[]): Promise<void> => {
+    await api.post(`/jobs/${jobId}/technicians`, { technicianIds });
+  },
+
+  removeTechnicianFromJob: async (jobId: number, technicianId: number): Promise<void> => {
+    await api.delete(`/jobs/${jobId}/technicians/${technicianId}`);
+  },
+
+  // Job Parts
+  addJobPart: async (jobId: number, data: Partial<JobPart>): Promise<JobPart> => {
+    const response = await api.post<JobPart>(`/jobs/${jobId}/parts`, data);
+    return response.data;
+  },
+
+  removeJobPart: async (jobId: number, partId: number): Promise<void> => {
+    await api.delete(`/jobs/${jobId}/parts/${partId}`);
+  },
+
+  // Job Labor
+  addJobLabor: async (jobId: number, data: Partial<JobLabor>): Promise<JobLabor> => {
+    const response = await api.post<JobLabor>(`/jobs/${jobId}/labor`, data);
+    return response.data;
+  },
+
+  removeJobLabor: async (jobId: number, laborId: number): Promise<void> => {
+    await api.delete(`/jobs/${jobId}/labor/${laborId}`);
+  },
+
+  // Inventory
+  getInventory: async (page = 1, limit = 10, category = '', search = ''): Promise<InventoryResponse> => {
+    const response = await api.get<InventoryResponse>('/inventory', {
+      params: { page, limit, category: category || undefined, search: search || undefined },
+    });
+    return response.data;
+  },
+
+  getInventoryById: async (id: number): Promise<InventoryItem> => {
+    const response = await api.get<InventoryItem>(`/inventory/${id}`);
+    return response.data;
+  },
+
+  createInventoryItem: async (data: Partial<InventoryItem>): Promise<InventoryItem> => {
+    const response = await api.post<InventoryItem>('/inventory', data);
+    return response.data;
+  },
+
+  updateInventoryItem: async (id: number, data: Partial<InventoryItem>): Promise<InventoryItem> => {
+    const response = await api.put<InventoryItem>(`/inventory/${id}`, data);
+    return response.data;
+  },
+
+  updateInventoryStock: async (id: number, quantity: number, type: 'add' | 'subtract'): Promise<InventoryItem> => {
+    const response = await api.patch<InventoryItem>(`/inventory/${id}/stock`, { quantity, type });
+    return response.data;
+  },
+
+  deleteInventoryItem: async (id: number): Promise<void> => {
+    await api.delete(`/inventory/${id}`);
+  },
+
+  getInventoryCategories: async (): Promise<string[]> => {
+    const response = await api.get<string[]>('/inventory/categories');
+    return response.data;
+  },
+
+  getLowStockItems: async (): Promise<InventoryItem[]> => {
+    const response = await api.get<InventoryItem[]>('/inventory/low-stock');
+    return response.data;
+  },
+
+  // Estimates
+  getEstimates: async (page = 1, limit = 10, status = '', customerId?: number): Promise<EstimatesResponse> => {
+    const response = await api.get<EstimatesResponse>('/estimates', {
+      params: { page, limit, status: status || undefined, customerId },
+    });
+    return response.data;
+  },
+
+  getEstimateById: async (id: number): Promise<Estimate> => {
+    const response = await api.get<Estimate>(`/estimates/${id}`);
+    return response.data;
+  },
+
+  createEstimate: async (data: Partial<Estimate>): Promise<Estimate> => {
+    const response = await api.post<Estimate>('/estimates', data);
+    return response.data;
+  },
+
+  updateEstimate: async (id: number, data: Partial<Estimate>): Promise<Estimate> => {
+    const response = await api.put<Estimate>(`/estimates/${id}`, data);
+    return response.data;
+  },
+
+  updateEstimateStatus: async (id: number, status: string): Promise<Estimate> => {
+    const response = await api.patch<Estimate>(`/estimates/${id}/status`, { status });
+    return response.data;
+  },
+
+  sendEstimate: async (id: number): Promise<void> => {
+    await api.post(`/estimates/${id}/send`);
+  },
+
+  convertEstimateToJob: async (id: number): Promise<Job> => {
+    const response = await api.post<Job>(`/estimates/${id}/convert-to-job`);
+    return response.data;
+  },
+
+  deleteEstimate: async (id: number): Promise<void> => {
+    await api.delete(`/estimates/${id}`);
+  },
+
+  // Invoices
+  getInvoices: async (page = 1, limit = 10, status = '', customerId?: number): Promise<InvoicesResponse> => {
+    const response = await api.get<InvoicesResponse>('/invoices', {
+      params: { page, limit, status: status || undefined, customerId },
+    });
+    return response.data;
+  },
+
+  getInvoiceById: async (id: number): Promise<Invoice> => {
+    const response = await api.get<Invoice>(`/invoices/${id}`);
+    return response.data;
+  },
+
+  createInvoice: async (data: Partial<Invoice>): Promise<Invoice> => {
+    const response = await api.post<Invoice>('/invoices', data);
+    return response.data;
+  },
+
+  createInvoiceFromJob: async (jobId: number): Promise<Invoice> => {
+    const response = await api.post<Invoice>(`/jobs/${jobId}/create-invoice`);
+    return response.data;
+  },
+
+  updateInvoice: async (id: number, data: Partial<Invoice>): Promise<Invoice> => {
+    const response = await api.put<Invoice>(`/invoices/${id}`, data);
+    return response.data;
+  },
+
+  sendInvoice: async (id: number): Promise<void> => {
+    await api.post(`/invoices/${id}/send`);
+  },
+
+  voidInvoice: async (id: number): Promise<void> => {
+    await api.post(`/invoices/${id}/void`);
+  },
+
+  deleteInvoice: async (id: number): Promise<void> => {
+    await api.delete(`/invoices/${id}`);
+  },
+
+  // Payments
+  getPayments: async (page = 1, limit = 10, invoiceId?: number): Promise<PaymentsResponse> => {
+    const response = await api.get<PaymentsResponse>('/payments', {
+      params: { page, limit, invoiceId },
+    });
+    return response.data;
+  },
+
+  recordPayment: async (invoiceId: number, data: Partial<Payment>): Promise<Payment> => {
+    const response = await api.post<Payment>(`/invoices/${invoiceId}/payments`, data);
+    return response.data;
+  },
+
+  refundPayment: async (paymentId: number): Promise<Payment> => {
+    const response = await api.post<Payment>(`/payments/${paymentId}/refund`);
+    return response.data;
+  },
+
+  // Timesheets
+  getTimesheets: async (page = 1, limit = 10, technicianId?: number, startDate?: string, endDate?: string, status = ''): Promise<TimesheetsResponse> => {
+    const response = await api.get<TimesheetsResponse>('/timesheets', {
+      params: { page, limit, technicianId, startDate, endDate, status: status || undefined },
+    });
+    return response.data;
+  },
+
+  createTimesheet: async (data: Partial<Timesheet>): Promise<Timesheet> => {
+    const response = await api.post<Timesheet>('/timesheets', data);
+    return response.data;
+  },
+
+  updateTimesheet: async (id: number, data: Partial<Timesheet>): Promise<Timesheet> => {
+    const response = await api.put<Timesheet>(`/timesheets/${id}`, data);
+    return response.data;
+  },
+
+  approveTimesheet: async (id: number): Promise<Timesheet> => {
+    const response = await api.post<Timesheet>(`/timesheets/${id}/approve`);
+    return response.data;
+  },
+
+  rejectTimesheet: async (id: number, reason?: string): Promise<Timesheet> => {
+    const response = await api.post<Timesheet>(`/timesheets/${id}/reject`, { reason });
+    return response.data;
+  },
+
+  clockIn: async (technicianId: number, jobId?: number): Promise<Timesheet> => {
+    const response = await api.post<Timesheet>('/timesheets/clock-in', { technicianId, jobId });
+    return response.data;
+  },
+
+  clockOut: async (timesheetId: number): Promise<Timesheet> => {
+    const response = await api.post<Timesheet>(`/timesheets/${timesheetId}/clock-out`);
+    return response.data;
+  },
+
+  // Dispatch Schedule
+  getDispatchSchedule: async (date: string, technicianId?: number): Promise<DispatchScheduleResponse> => {
+    const response = await api.get<DispatchScheduleResponse>('/dispatch', {
+      params: { date, technicianId },
+    });
+    return response.data;
+  },
+
+  createDispatchSchedule: async (data: Partial<DispatchSchedule>): Promise<DispatchSchedule> => {
+    const response = await api.post<DispatchSchedule>('/dispatch', data);
+    return response.data;
+  },
+
+  updateDispatchSchedule: async (id: number, data: Partial<DispatchSchedule>): Promise<DispatchSchedule> => {
+    const response = await api.put<DispatchSchedule>(`/dispatch/${id}`, data);
+    return response.data;
+  },
+
+  updateDispatchStatus: async (id: number, status: string): Promise<DispatchSchedule> => {
+    const response = await api.patch<DispatchSchedule>(`/dispatch/${id}/status`, { status });
+    return response.data;
+  },
+
+  deleteDispatchSchedule: async (id: number): Promise<void> => {
+    await api.delete(`/dispatch/${id}`);
+  },
+
+  dispatchJob: async (jobId: number, technicianId: number, scheduledDate: string, startTime: string, endTime: string): Promise<DispatchSchedule> => {
+    const response = await api.post<DispatchSchedule>('/dispatch/assign', {
+      jobId,
+      technicianId,
+      scheduledDate,
+      startTime,
+      endTime,
+    });
+    return response.data;
+  },
+
+  // Reports
+  getRevenueReport: async (startDate: string, endDate: string, groupBy: 'day' | 'week' | 'month' = 'day'): Promise<{ data: { date: string; revenue: number; cost: number; profit: number }[] }> => {
+    const response = await api.get('/reports/revenue', {
+      params: { startDate, endDate, groupBy },
+    });
+    return response.data;
+  },
+
+  getTechnicianPerformance: async (startDate: string, endDate: string): Promise<{ data: { technicianId: number; technicianName: string; jobsCompleted: number; revenue: number; avgRating: number; hoursWorked: number }[] }> => {
+    const response = await api.get('/reports/technician-performance', {
+      params: { startDate, endDate },
+    });
+    return response.data;
+  },
+
+  getJobsReport: async (startDate: string, endDate: string): Promise<{ data: { status: string; count: number }[] }> => {
+    const response = await api.get('/reports/jobs', {
+      params: { startDate, endDate },
+    });
+    return response.data;
+  },
+
+  getServiceReport: async (startDate: string, endDate: string): Promise<{ data: { serviceType: string; count: number; revenue: number }[] }> => {
+    const response = await api.get('/reports/services', {
+      params: { startDate, endDate },
+    });
+    return response.data;
   },
 };
