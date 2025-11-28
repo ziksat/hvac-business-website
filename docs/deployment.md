@@ -46,7 +46,9 @@ az login
 az group create --name hvac-rg --location eastus
 ```
 
-## Step 3: Deploy with ARM Template
+## Step 3: Deploy Infrastructure
+
+You can deploy Azure resources using either Bicep (recommended) or ARM templates.
 
 ### Generate Secure Passwords
 
@@ -58,7 +60,21 @@ JWT_SECRET=$(openssl rand -base64 32)
 SQL_PASSWORD="HvacAdmin2024!"
 ```
 
-### Deploy Resources
+### Option A: Deploy with Bicep (Recommended)
+
+Bicep is a domain-specific language for deploying Azure resources. It's the modern approach recommended by Microsoft.
+
+```bash
+az deployment group create \
+  --resource-group hvac-rg \
+  --template-file azure/bicep/main.bicep \
+  --parameters appName=hvac-business \
+  --parameters sqlAdminLogin=hvacadmin \
+  --parameters sqlAdminPassword=$SQL_PASSWORD \
+  --parameters jwtSecret=$JWT_SECRET
+```
+
+### Option B: Deploy with ARM Template
 
 ```bash
 az deployment group create \
@@ -91,6 +107,16 @@ az deployment group show \
 
 ## Step 5: Configure GitHub Actions
 
+### CI/CD Workflows
+
+This project includes three GitHub Actions workflows:
+
+| Workflow | File | Purpose |
+|----------|------|---------|
+| CI | `ci.yml` | Builds and tests on PRs and pushes to main |
+| Deploy | `azure-deploy.yml` | Full deployment to Azure App Service |
+| Static Web Apps | `azure-static-web-apps.yml` | Frontend-only deployment |
+
 ### Create Azure Service Principal
 
 ```bash
@@ -105,9 +131,11 @@ az ad sp create-for-rbac \
 
 In your GitHub repository, go to Settings > Secrets and add:
 
-| Secret Name | Value |
-|-------------|-------|
-| AZURE_CREDENTIALS | JSON output from service principal creation |
+| Secret Name | Value | Required For |
+|-------------|-------|--------------|
+| AZURE_CREDENTIALS | JSON output from service principal creation | Full deployment |
+| AZURE_STATIC_WEB_APPS_API_TOKEN | Static Web Apps deployment token | Static Web Apps only |
+| API_URL | Backend API URL (e.g., https://hvac-api.azurewebsites.net/api) | Static Web Apps only |
 
 ### Update Workflow File
 
@@ -122,7 +150,15 @@ env:
 
 ## Step 6: Deploy Code
 
-### Option A: GitHub Actions (Automated)
+### Deployment Options
+
+This project supports multiple deployment strategies:
+
+1. **Full Azure App Service** - Deploy frontend, backend, and functions to App Service
+2. **Azure Static Web Apps** - Cost-effective option for frontend only (uses `azure-static-web-apps.yml`)
+3. **Manual Deployment** - Deploy components individually
+
+### Option A: GitHub Actions - Full Deployment (Automated)
 
 Push to the main branch to trigger automatic deployment:
 
@@ -130,7 +166,22 @@ Push to the main branch to trigger automatic deployment:
 git push origin main
 ```
 
-### Option B: Manual Deployment
+This will deploy:
+- Backend API to Azure Web App
+- Frontend to Azure Web App  
+- Azure Functions
+
+### Option B: Azure Static Web Apps (Frontend Only)
+
+For a more cost-effective frontend deployment, use Azure Static Web Apps:
+
+1. Create a Static Web App in Azure Portal
+2. Get the deployment token
+3. Add `AZURE_STATIC_WEB_APPS_API_TOKEN` secret to GitHub
+4. Add `API_URL` secret with your backend API URL
+5. Push to main to trigger deployment
+
+### Option C: Manual Deployment
 
 #### Deploy Backend
 
