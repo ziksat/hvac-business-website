@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import AdminLayout from './admin/AdminLayout';
 import Home from './pages/Home';
 import Services from './pages/Services';
+import Parts from './pages/Parts';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Blog from './pages/Blog';
@@ -34,6 +35,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="services" element={<Services />} />
+        <Route path="parts" element={<Parts />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
         <Route path="blog" element={<Blog />} />
