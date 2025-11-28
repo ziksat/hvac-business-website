@@ -98,13 +98,16 @@ const Parts: React.FC = () => {
     return filtered;
   }, [categoryFilter, searchTerm]);
 
-  // Determine if we should use mock data (when backend fails or returns no data)
-  const useMockData = isError || !data || !data.items || data.items.length === 0;
+  // Determine if we should use mock data (when backend fails, is loading, or returns no data)
+  const useMockData = isLoading || isError || !data || !data.items || data.items.length === 0;
   
   const parts = useMockData ? filteredMockParts : data.items;
   const totalPages = useMockData ? Math.ceil(filteredMockParts.length / itemsPerPage) : (data?.pagination?.totalPages || 1);
   const categories = categoriesData?.length ? categoriesData : mockCategories;
   const displayParts = useMockData ? filteredMockParts.slice((page - 1) * itemsPerPage, page * itemsPerPage) : parts;
+  
+  // For demo mode: always show parts immediately without loading spinner
+  const showLoading = false; // Disable loading spinner for better demo experience
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -184,7 +187,7 @@ const Parts: React.FC = () => {
       {/* Parts List */}
       <Box sx={{ py: 6 }}>
         <Container maxWidth="lg">
-          {isLoading ? (
+          {showLoading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
               <CircularProgress />
             </Box>
