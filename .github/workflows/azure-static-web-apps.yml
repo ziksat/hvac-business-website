@@ -14,6 +14,10 @@ on:
       - 'frontend/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pull-requests: write
+
 env:
   NODE_VERSION: '18.x'
 
@@ -41,7 +45,7 @@ jobs:
         working-directory: ./frontend
         env:
           CI: false
-          REACT_APP_API_URL: ${{ secrets.API_URL || 'https://hvac-business-api.azurewebsites.net/api' }}
+          REACT_APP_API_URL: ${{ secrets.API_URL }}
         run: npm run build
 
       - name: Deploy to Azure Static Web Apps

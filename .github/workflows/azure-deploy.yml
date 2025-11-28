@@ -15,6 +15,10 @@ on:
           - production
           - staging
 
+permissions:
+  contents: read
+  id-token: write
+
 env:
   AZURE_WEBAPP_NAME_API: hvac-business-api
   AZURE_WEBAPP_NAME_WEB: hvac-business-web

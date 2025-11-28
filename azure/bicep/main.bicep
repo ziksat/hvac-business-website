@@ -37,7 +37,9 @@ var apiAppName = '${appName}-api'
 var functionAppName = '${appName}-functions'
 var sqlServerName = '${appName}-sql'
 var sqlDatabaseName = '${appName}-db'
-var storageAccountName = replace('${appName}storage', '-', '')
+// Storage account names must be globally unique and contain only lowercase letters/numbers
+var uniqueSuffix = uniqueString(resourceGroup().id)
+var storageAccountName = toLower(take(replace('${appName}stg${uniqueSuffix}', '-', ''), 24))
 var appInsightsName = '${appName}-insights'
 
 // Application Insights
@@ -95,6 +97,7 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2022-05-01-preview' = {
 }
 
 // SQL Firewall Rule - Allow Azure Services
+// Note: For production, consider restricting to specific Azure services or using Private Endpoints
 resource sqlFirewallRule 'Microsoft.Sql/servers/firewallRules@2022-05-01-preview' = {
   parent: sqlServer
   name: 'AllowAzureServices'
@@ -117,6 +120,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
 }
 
 // API App Service
+// Note: For production, consider using Key Vault references for sensitive settings
 resource apiApp 'Microsoft.Web/sites@2022-09-01' = {
   name: apiAppName
   location: location

@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '18.x'
 
@@ -98,3 +101,9 @@ jobs:
           echo "Validating ARM template syntax..."
           cat azure/arm-templates/main.json | jq empty
           echo "ARM template is valid JSON"
+
+      - name: Validate Bicep template
+        run: |
+          echo "Validating Bicep template..."
+          az bicep build --file azure/bicep/main.bicep --stdout > /dev/null
+          echo "Bicep template is valid"
