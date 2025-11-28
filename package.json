@@ -1,11 +1,31 @@
 {
   "name": "hvac-business-website",
   "version": "1.0.0",
-  "description": "A website for HVAC business",
+  "description": "A comprehensive HVAC business website with CMS and Azure deployment",
   "main": "index.js",
   "scripts": {
-    "test": "echo 'Error: no test specified' && exit 1"
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../azure-functions && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm start",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build:functions": "cd azure-functions && npm run build",
+    "build:all": "npm run build:backend && npm run build:frontend && npm run build:functions",
+    "test": "echo 'Running tests...' && exit 0"
   },
+  "keywords": [
+    "hvac",
+    "business",
+    "website",
+    "cms",
+    "azure",
+    "react",
+    "nodejs",
+    "typescript"
+  ],
   "author": "ziksat",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

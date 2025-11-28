@@ -1,0 +1,17 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "DB_SERVER": "your-server.database.windows.net",
+    "DB_DATABASE": "hvac_database",
+    "DB_USER": "your-username",
+    "DB_PASSWORD": "your-password",
+    "EMAIL_HOST": "smtp.example.com",
+    "EMAIL_PORT": "587",
+    "EMAIL_USER": "your-email@example.com",
+    "EMAIL_PASSWORD": "your-email-password",
+    "EMAIL_FROM": "noreply@yourhvacbusiness.com",
+    "FRONTEND_URL": "https://yourhvacbusiness.com"
+  }
+}
