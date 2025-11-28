@@ -18,6 +18,14 @@ import TestimonialManagement from './admin/TestimonialManagement';
 import ServiceRequestManagement from './admin/ServiceRequestManagement';
 import Settings from './admin/Settings';
 import ProtectedRoute from './components/ProtectedRoute';
+// ServiceTitan-like feature imports
+import DispatchBoard from './admin/DispatchBoard';
+import JobManagement from './admin/JobManagement';
+import TechnicianManagement from './admin/TechnicianManagement';
+import InvoiceManagement from './admin/InvoiceManagement';
+import InventoryManagement from './admin/InventoryManagement';
+import EstimateManagement from './admin/EstimateManagement';
+import Reports from './admin/Reports';
 
 function App() {
   return (
@@ -43,10 +51,18 @@ function App() {
         <Route index element={<Dashboard />} />
         <Route path="customers" element={<CustomerManagement />} />
         <Route path="services" element={<ServiceManagement />} />
+        <Route path="service-requests" element={<ServiceRequestManagement />} />
         <Route path="blog" element={<BlogManagement />} />
         <Route path="testimonials" element={<TestimonialManagement />} />
-        <Route path="service-requests" element={<ServiceRequestManagement />} />
         <Route path="settings" element={<Settings />} />
+        {/* ServiceTitan-like features */}
+        <Route path="dispatch" element={<DispatchBoard />} />
+        <Route path="jobs" element={<JobManagement />} />
+        <Route path="technicians" element={<TechnicianManagement />} />
+        <Route path="invoices" element={<InvoiceManagement />} />
+        <Route path="inventory" element={<InventoryManagement />} />
+        <Route path="estimates" element={<EstimateManagement />} />
+        <Route path="reports" element={<Reports />} />
       </Route>
     </Routes>
   );

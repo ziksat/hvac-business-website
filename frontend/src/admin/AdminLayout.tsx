@@ -18,6 +18,7 @@ import {
   MenuItem,
   useTheme,
   useMediaQuery,
+  Collapse,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -29,18 +30,75 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+// ServiceTitan-like feature icons
+import DispatchIcon from '@mui/icons-material/LocalShipping';
+import WorkIcon from '@mui/icons-material/Work';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import { useAuth } from '../context/AuthContext';
 
-const drawerWidth = 260;
+const drawerWidth = 280;
 
-const menuItems = [
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin' },
-  { text: 'Customers', icon: <PeopleIcon />, path: '/admin/customers' },
-  { text: 'Services', icon: <BuildIcon />, path: '/admin/services' },
-  { text: 'Service Requests', icon: <CalendarTodayIcon />, path: '/admin/service-requests' },
-  { text: 'Blog Posts', icon: <ArticleIcon />, path: '/admin/blog' },
-  { text: 'Testimonials', icon: <StarIcon />, path: '/admin/testimonials' },
-  { text: 'Settings', icon: <SettingsIcon />, path: '/admin/settings' },
+interface MenuGroup {
+  title: string;
+  items: { text: string; icon: React.ReactNode; path: string }[];
+}
+
+const menuGroups: MenuGroup[] = [
+  {
+    title: 'Overview',
+    items: [
+      { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin' },
+    ],
+  },
+  {
+    title: 'Operations',
+    items: [
+      { text: 'Dispatch Board', icon: <DispatchIcon />, path: '/admin/dispatch' },
+      { text: 'Jobs', icon: <WorkIcon />, path: '/admin/jobs' },
+      { text: 'Service Requests', icon: <CalendarTodayIcon />, path: '/admin/service-requests' },
+    ],
+  },
+  {
+    title: 'Sales',
+    items: [
+      { text: 'Estimates', icon: <RequestQuoteIcon />, path: '/admin/estimates' },
+      { text: 'Invoices', icon: <ReceiptIcon />, path: '/admin/invoices' },
+    ],
+  },
+  {
+    title: 'Resources',
+    items: [
+      { text: 'Customers', icon: <PeopleIcon />, path: '/admin/customers' },
+      { text: 'Technicians', icon: <EngineeringIcon />, path: '/admin/technicians' },
+      { text: 'Inventory', icon: <InventoryIcon />, path: '/admin/inventory' },
+    ],
+  },
+  {
+    title: 'Content',
+    items: [
+      { text: 'Services', icon: <BuildIcon />, path: '/admin/services' },
+      { text: 'Blog Posts', icon: <ArticleIcon />, path: '/admin/blog' },
+      { text: 'Testimonials', icon: <StarIcon />, path: '/admin/testimonials' },
+    ],
+  },
+  {
+    title: 'Analytics',
+    items: [
+      { text: 'Reports', icon: <BarChartIcon />, path: '/admin/reports' },
+    ],
+  },
+  {
+    title: 'Configuration',
+    items: [
+      { text: 'Settings', icon: <SettingsIcon />, path: '/admin/settings' },
+    ],
+  },
 ];
 
 const AdminLayout: React.FC = () => {
@@ -69,44 +127,85 @@ const AdminLayout: React.FC = () => {
     navigate('/admin/login');
   };
 
+  // Find current page title
+  const getCurrentPageTitle = () => {
+    for (const group of menuGroups) {
+      const found = group.items.find(item => item.path === location.pathname);
+      if (found) return found.text;
+    }
+    return 'Dashboard';
+  };
+
   const drawer = (
-    <Box>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
         <AcUnitIcon sx={{ color: 'primary.main', fontSize: 32, mr: 1 }} />
-        <Typography variant="h6" fontWeight={700} color="primary">
-          HVAC Admin
-        </Typography>
+        <Box>
+          <Typography variant="h6" fontWeight={700} color="primary" sx={{ lineHeight: 1.2 }}>
+            HVAC Pro
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Field Service Management
+          </Typography>
+        </Box>
       </Box>
       <Divider />
-      <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton
-              component={Link}
-              to={item.path}
-              selected={location.pathname === item.path}
-              onClick={() => isMobile && setMobileOpen(false)}
+      <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
+        {menuGroups.map((group) => (
+          <Box key={group.title}>
+            <Typography
+              variant="overline"
               sx={{
-                '&.Mui-selected': {
-                  bgcolor: 'primary.light',
-                  color: 'white',
-                  '& .MuiListItemIcon-root': { color: 'white' },
-                  '&:hover': { bgcolor: 'primary.main' },
-                },
+                px: 2,
+                pt: 2,
+                pb: 0.5,
+                display: 'block',
+                color: 'text.secondary',
+                fontSize: '0.7rem',
+                letterSpacing: 1,
               }}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
+              {group.title}
+            </Typography>
+            <List dense disablePadding>
+              {group.items.map((item) => (
+                <ListItem key={item.text} disablePadding>
+                  <ListItemButton
+                    component={Link}
+                    to={item.path}
+                    selected={location.pathname === item.path}
+                    onClick={() => isMobile && setMobileOpen(false)}
+                    sx={{
+                      py: 0.75,
+                      '&.Mui-selected': {
+                        bgcolor: 'primary.light',
+                        color: 'white',
+                        '& .MuiListItemIcon-root': { color: 'white' },
+                        '&:hover': { bgcolor: 'primary.main' },
+                      },
+                    }}
+                  >
+                    <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
+                    <ListItemText 
+                      primary={item.text} 
+                      primaryTypographyProps={{ fontSize: '0.875rem' }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
         ))}
-      </List>
+      </Box>
       <Divider />
-      <List>
+      <List dense>
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/" target="_blank">
-            <ListItemIcon><AcUnitIcon /></ListItemIcon>
-            <ListItemText primary="View Website" />
+            <ListItemIcon sx={{ minWidth: 40 }}><AcUnitIcon /></ListItemIcon>
+            <ListItemText 
+              primary="View Website" 
+              primaryTypographyProps={{ fontSize: '0.875rem' }}
+            />
           </ListItemButton>
         </ListItem>
       </List>
@@ -134,7 +233,7 @@ const AdminLayout: React.FC = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            {menuItems.find((item) => item.path === location.pathname)?.text || 'Dashboard'}
+            {getCurrentPageTitle()}
           </Typography>
           <IconButton onClick={handleMenuOpen}>
             <Avatar sx={{ bgcolor: 'primary.main' }}>
